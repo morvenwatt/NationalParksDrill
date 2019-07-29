@@ -9,8 +9,6 @@ function formatQueryParams(params) {
   const queryItems = Object.keys(params)
     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
   return queryItems.join('&');
-
-// how to add stateCode=XX&limit=yy OR stateCode=XX&stateCode=XX&limit=yy
 }
 
 function displayResults(responseJson) {
@@ -18,11 +16,11 @@ function displayResults(responseJson) {
   $('#results-list').empty();
   for (let i = 0; i < responseJson.data.length; i++){
     $('#results-list').append(
-      `<li><h3>${responseJson.data[0].fullName}</h3>
-      <p>${responseJson.data[0].description}</p>
-      <p>${responseJson.data[0].states}</p>
-      <p>'${responseJson.data[0].url}'</p>
-      <p>'${responseJson.data[0].address}</p>
+      `<li><h3>${responseJson.data[i].fullName}</h3>
+      <p>${responseJson.data[i].description}</p>
+      <p>${responseJson.data[i].states}</p>
+      <p>'${responseJson.data[i].url}'</p>
+      <p>'${responseJson.data[i].directionsUrl}</p>
       </li>`
     )};
   $('#results').removeClass('hidden');
@@ -30,8 +28,8 @@ function displayResults(responseJson) {
 
 function getNationalParks(query, maxResults=10) {
   const params = {
-    stateCode: '',
-    maxResults
+    stateCode: query,
+    limit: maxResults 
   };
   const queryString = formatQueryParams(params)
   const url = searchURL + '?' + queryString + '&api_key=' + apiKey;
